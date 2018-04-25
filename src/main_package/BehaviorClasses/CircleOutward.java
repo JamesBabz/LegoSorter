@@ -17,6 +17,7 @@ public class CircleOutward implements Behavior {
 		   this.pilot.setAngularSpeed(100);
 	   }
 	   
+	   //Not used
 	   public CircleOutward(RegulatedMotor leftWheelMotor, RegulatedMotor rightWheelMotor) {
 		this.leftWheelMotor = leftWheelMotor;
 		this.rightWheelMotor = rightWheelMotor;
@@ -32,6 +33,7 @@ public class CircleOutward implements Behavior {
 		if(!suppressed) {
 			pilot.travelArc(radius, angle);
 		
+			//Repeat with bigger angle to make it go outwards
    	 		while(!pilot.isMoving()) {
    	 			move(radius, angle+10);
    	 		}
