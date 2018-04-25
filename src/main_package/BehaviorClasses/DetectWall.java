@@ -18,16 +18,16 @@ import lejos.robotics.subsumption.Behavior;
 import main_package.Main;
 
 public class DetectWall implements Behavior{
-	  private EV3UltrasonicSensor sensor;
+	  	private EV3UltrasonicSensor sensor;
 	    private boolean suppressed = false;
 	    private Port port;
 	    private RangeFinderAdapter rangeFinder;
 	    private EV3UltrasonicSensor usSensor;
-	    private DifferentialPilot pilot;
+	    private MovePilot pilot;
 	    private int reverseDistance = 20;
 	    private int maxRange = 30;
 	    
-	    public DetectWall(DifferentialPilot pilot, Port port) {
+	    public DetectWall(MovePilot pilot, Port port) {
 	    	this.port = port;
 	    	usSensor = new EV3UltrasonicSensor(port);
 	    	rangeFinder = new RangeFinderAdapter(usSensor.getDistanceMode());
