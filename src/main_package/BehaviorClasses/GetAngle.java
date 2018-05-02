@@ -1,25 +1,17 @@
 package main_package.BehaviorClasses;
 
-import java.util.Random;
 
-import lejos.hardware.Sound;
-import lejos.hardware.ev3.LocalEV3;
-import lejos.hardware.motor.Motor;
-import lejos.hardware.motor.NXTRegulatedMotor;
+
 import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3GyroSensor;
-import lejos.hardware.sensor.EV3UltrasonicSensor;
-import lejos.robotics.RangeFinderAdapter;
-import lejos.robotics.chassis.Chassis;
-import lejos.robotics.chassis.Wheel;
-import lejos.robotics.chassis.WheeledChassis;
-import lejos.robotics.navigation.DifferentialPilot;
+import lejos.robotics.GyroscopeAdapter;
 import lejos.robotics.navigation.MovePilot;
 import lejos.robotics.subsumption.Behavior;
 import main_package.Main;
 
 public class GetAngle implements Behavior{
 	  	private EV3GyroSensor sensor;
+	  	private GyroscopeAdapter adapter;
 	    private boolean suppressed = false;
 	    private Port port;
 	    private MovePilot pilot;
@@ -28,20 +20,25 @@ public class GetAngle implements Behavior{
 	    public GetAngle(MovePilot pilot, Port port) {
 	    	this.port = port;
 	    	this.pilot = pilot;
-	    }
-
-	    public boolean takeControl() {
-	    	
-	    	
-			return true;
+	    	this.sensor = new EV3GyroSensor(port);
+	    	this.adapter = new GyroscopeAdapter(sensor, 360);
 	    	
 	    }
 
-	    public void suppress() {
+	    @Override
+		public boolean takeControl() {
+	    	return this.adapter.getAngle() >= 360;
+	    }
+
+	    @Override
+		public void suppress() {
 	       suppressed = true;
 	    }
 
-	    public void action() {
-	
+	    @Override
+		public void action() {
+	    	suppressed = false;
+	    	this.adapter.reset();
+	    	Main.turnRadius = Main.turnRadius+10;
 	    }
 }

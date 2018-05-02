@@ -1,7 +1,5 @@
 package main_package.BehaviorClasses;
 
-import lejos.hardware.Button;
-import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.motor.Motor;
 import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3ColorSensor;
@@ -9,7 +7,6 @@ import lejos.robotics.Color;
 import lejos.robotics.ColorAdapter;
 import lejos.robotics.navigation.MovePilot;
 import lejos.robotics.subsumption.Behavior;
-import lejos.utility.Delay;
 
 public class ReadColor implements Behavior {
 
@@ -23,7 +20,6 @@ public class ReadColor implements Behavior {
 	
 	public ReadColor(MovePilot pilot, Port port)
 	{
-		System.out.println(rgb);
 		this.pilot = pilot;
 		this.port = port;
 		
@@ -38,12 +34,7 @@ public class ReadColor implements Behavior {
 	
 	@Override
 	public boolean takeControl() {
-		
-	      
-			
-		//System.out.println(rgb);
 		 rgb = adapter.getColorID();
-
 		return rgb == Color.GREEN;
 	}
 
@@ -54,15 +45,9 @@ public class ReadColor implements Behavior {
 
 	@Override
 	public void action() {
-
-		System.out.println(adapter.getColorID());
-		System.out.println("FUCK ROBOT");
 		
 		suppressed = false;
 
-		
-		 
-		 //pilot.stop();
 		 Motor.B.setSpeed(50);
 		 Motor.B.rotateTo(150);
 		 Motor.B.stop();
