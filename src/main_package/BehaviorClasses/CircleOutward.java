@@ -14,7 +14,7 @@ public class CircleOutward implements Behavior {
 	   public CircleOutward(MovePilot pilot) {
 		   this.pilot = pilot;
 		   this.pilot.setLinearSpeed(100);
-		   this.pilot.setAngularSpeed(100);
+		   this.pilot.setAngularSpeed(150);
 	   }
 	   
 	   //Not used
@@ -46,7 +46,7 @@ public class CircleOutward implements Behavior {
 
 	   public void action() {
 	     suppressed = false;
-	     int radius = 50;
+	     int radius = 100;
 	     int angle = 360;
 	     
 		 move(radius, angle);
