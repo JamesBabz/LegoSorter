@@ -11,6 +11,8 @@ public class CircleOutward implements Behavior {
 	   private RegulatedMotor rightWheelMotor;
 	   private MovePilot pilot;
 	   
+	   private int radius = 2;
+	   
 	   public CircleOutward(MovePilot pilot) {
 		   this.pilot = pilot;
 		   this.pilot.setLinearSpeed(100);
@@ -29,30 +31,19 @@ public class CircleOutward implements Behavior {
 	      return true;
 	   }
 	
-	private void move(int radius, int angle){
-		if(!suppressed) {
-			pilot.travelArc(radius, angle);
-		
-			//Repeat with bigger angle to make it go outwards
-   	 		while(!pilot.isMoving()) {
-   	 			move(radius, angle+10);
-   	 		}
-		}
-	}
 
 	   public void suppress() {
 	      suppressed = true;
 	   }
 
 	   public void action() {
-	     suppressed = false;
-	     int radius = 100;
-	     int angle = 360;
-	     
-		 move(radius, angle);
-	     
-	     while( !suppressed ) {
-	        Thread.yield();
-     	 }
-	   }
-	}
+		     suppressed = false;
+		     	//pilot.travelArc(radius, angle);
+		     	//angle += 10;
+		     	pilot.arcForward(radius);
+			
+		     while( !suppressed) {
+		        Thread.yield();
+	     	 }
+		     pilot.stop();
+	   }}

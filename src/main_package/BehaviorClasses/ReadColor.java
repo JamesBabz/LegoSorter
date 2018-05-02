@@ -26,14 +26,25 @@ public class ReadColor implements Behavior {
 		System.out.println(rgb);
 		this.pilot = pilot;
 		this.port = port;
+		
+  		 color = new EV3ColorSensor(port);
+		 adapter = new ColorAdapter(color);
+   		 color.setCurrentMode("RGB");
+   		 color.setFloodlight(Color.WHITE);
+   		 
 	}
 
 
 	
 	@Override
 	public boolean takeControl() {
+		
+	      
+			
+		//System.out.println(rgb);
+		 rgb = adapter.getColorID();
 
-		return true;
+		return rgb == Color.GREEN;
 	}
 
 	@Override
@@ -44,38 +55,23 @@ public class ReadColor implements Behavior {
 	@Override
 	public void action() {
 
+		System.out.println(adapter.getColorID());
+		System.out.println("FUCK ROBOT");
 		
-		 color = new EV3ColorSensor(port);
-		 color.setCurrentMode("RGB");
-		 
-		 
-		  
-	
-		
-		    while (Button.ESCAPE.isUp())
-		    {
-	    //   System.out.println("RED: " + rgb.getRed() + " GREEN: " + rgb.getGreen() + " BLUE: " + rgb.getBlue());
-	        Delay.msDelay(250);
-	        if (rgb == Color.GREEN) // color is red
-			{
-	        	  rgb = adapter.getColorID();
-	  		    color.setFloodlight(Color.WHITE);
-	  		    adapter = new ColorAdapter(color);
-	        	
-			 pilot.stop();
-			 Motor.B.setSpeed(50);
-			 Motor.B.rotateTo(150);
-			 Motor.B.stop();
-			 pilot.travel(-30);
-			 Motor.B.setSpeed(50);
-			 Motor.B.rotateTo(0);
-			 Motor.B.stop();
-			}
+		suppressed = false;
 
-		    		System.out.println(rgb);
-		    }
+		
+		 
+		 //pilot.stop();
+		 Motor.B.setSpeed(50);
+		 Motor.B.rotateTo(150);
+		 Motor.B.stop();
+		 pilot.travel(-30);
+		 Motor.B.setSpeed(50);
+		 Motor.B.rotateTo(0);
+		 Motor.B.stop();
 		    	
-		    		while( !suppressed ) {
+		    		while( !suppressed && pilot.isMoving()) {
 		    	        Thread.yield();
 		         	 }
 }
