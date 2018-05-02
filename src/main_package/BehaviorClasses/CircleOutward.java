@@ -1,9 +1,9 @@
 package main_package.BehaviorClasses;
 
-import lejos.hardware.motor.NXTRegulatedMotor;
 import lejos.robotics.RegulatedMotor;
 import lejos.robotics.navigation.MovePilot;
 import lejos.robotics.subsumption.Behavior;
+import main_package.Main;
 
 public class CircleOutward implements Behavior {
 	   private boolean suppressed = false;
@@ -11,10 +11,11 @@ public class CircleOutward implements Behavior {
 	   private RegulatedMotor rightWheelMotor;
 	   private MovePilot pilot;
 	   
-	   public CircleOutward(MovePilot pilot) {
+	 
+	public CircleOutward(MovePilot pilot) {
 		   this.pilot = pilot;
 		   this.pilot.setLinearSpeed(100);
-		   this.pilot.setAngularSpeed(100);
+		   this.pilot.setAngularSpeed(150);
 	   }
 	   
 	   //Not used
@@ -25,34 +26,23 @@ public class CircleOutward implements Behavior {
 		this.rightWheelMotor.setSpeed(80);
 	}
 
+	@Override
 	public boolean takeControl() {
 	      return true;
 	   }
 	
-	private void move(int radius, int angle){
-		if(!suppressed) {
-			pilot.travelArc(radius, angle);
-		
-			//Repeat with bigger angle to make it go outwards
-   	 		while(!pilot.isMoving()) {
-   	 			move(radius, angle+10);
-   	 		}
-		}
-	}
 
-	   public void suppress() {
+	   @Override
+	public void suppress() {
 	      suppressed = true;
 	   }
 
-	   public void action() {
-	     suppressed = false;
-	     int radius = 50;
-	     int angle = 360;
-	     
-		 move(radius, angle);
-	     
-	     while( !suppressed ) {
-	        Thread.yield();
-     	 }
-	   }
-	}
+	   @Override
+	public void action() {
+		     suppressed = false;
+		     	pilot.arcForward(Main.turnRadius);
+		     while( !suppressed) {
+		        Thread.yield();
+	     	 }
+		     pilot.stop();
+	   }}
