@@ -13,7 +13,15 @@ public class CircleOutward implements Behavior {
 	   
 	   private int radius = 2;
 	   
-	   public CircleOutward(MovePilot pilot) {
+	   public int getRadius() {
+		return radius;
+	}
+
+	public void setRadius(int radius) {
+		this.radius = radius;
+	}
+
+	public CircleOutward(MovePilot pilot) {
 		   this.pilot = pilot;
 		   this.pilot.setLinearSpeed(100);
 		   this.pilot.setAngularSpeed(150);
@@ -40,7 +48,9 @@ public class CircleOutward implements Behavior {
 		     suppressed = false;
 		     	//pilot.travelArc(radius, angle);
 		     	//angle += 10;
+		     
 		     	pilot.arcForward(radius);
+		     	
 			
 		     while( !suppressed) {
 		        Thread.yield();
