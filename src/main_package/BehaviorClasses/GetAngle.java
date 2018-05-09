@@ -6,6 +6,7 @@ import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.robotics.GyroscopeAdapter;
 import lejos.robotics.navigation.MovePilot;
+import lejos.robotics.navigation.Navigator;
 import lejos.robotics.subsumption.Behavior;
 import main_package.Main;
 
@@ -19,9 +20,9 @@ public class GetAngle implements Behavior{
 		private boolean hasExtended;
 		private int increaseAmount = 1;
 	    
-	    public GetAngle(MovePilot pilot, Port port) {
+	    public GetAngle(Navigator nav, Port port) {
 	    	this.port = port;
-	    	this.pilot = pilot;
+	    	this.pilot = (MovePilot) nav.getMoveController();
 	    	this.sensor = new EV3GyroSensor(port);
 	    	this.adapter = new GyroscopeAdapter(sensor, 360);
 	    	

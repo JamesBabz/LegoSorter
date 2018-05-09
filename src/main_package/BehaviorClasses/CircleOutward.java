@@ -2,6 +2,7 @@ package main_package.BehaviorClasses;
 
 import lejos.robotics.RegulatedMotor;
 import lejos.robotics.navigation.MovePilot;
+import lejos.robotics.navigation.Navigator;
 import lejos.robotics.subsumption.Behavior;
 import main_package.Main;
 
@@ -12,8 +13,8 @@ public class CircleOutward implements Behavior {
 	   private MovePilot pilot;
 	   
 	 
-	public CircleOutward(MovePilot pilot) {
-		   this.pilot = pilot;
+	public CircleOutward(Navigator nav) {
+		   this.pilot = (MovePilot) nav.getMoveController();
 		   this.pilot.setLinearSpeed(100);
 		   this.pilot.setAngularSpeed(150);
 	   }
