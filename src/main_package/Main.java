@@ -10,6 +10,7 @@ import lejos.robotics.subsumption.Behavior;
 import main_package.BehaviorClasses.CircleOutward;
 import main_package.BehaviorClasses.EscapeKeyPressed;
 import main_package.BehaviorClasses.GetAngle;
+import main_package.BehaviorClasses.GetCenter;
 import main_package.BehaviorClasses.ReadColor;
 
 public class Main {
@@ -19,7 +20,8 @@ public class Main {
 	private final static RegulatedMotor LEFT_WHEEL_MOTOR = Motor.A;
 	private final static RegulatedMotor RIGHT_WHEEL_MOTOR = Motor.D;
 	
-	public static int turnRadius = 2;
+	public static int startRadius = 50;
+	public static int turnRadius = 50;
 	
 	static Port colorSensorPort = LocalEV3.get().getPort("S1");
 	static Port eyesPort = LocalEV3.get().getPort("S2");
@@ -27,15 +29,16 @@ public class Main {
 	
 	private final static MovePilot pilot = new MovePilot(WHEEL_DIAMETER_MM, DISTANCE_BETWEEN_WHEEL_CENTER_MM, LEFT_WHEEL_MOTOR, RIGHT_WHEEL_MOTOR);
 	
+	
 	 public static void main(String[] args) throws Exception
 	 {
-		 
 		 
 		 
 		  Behavior b1 = new CircleOutward(pilot);
 		  Behavior b2 = new GetAngle(pilot, gyroscopePort);
 		  Behavior b3 = new EscapeKeyPressed();
 		  Behavior b4 = new ReadColor(pilot, colorSensorPort);
+		  Behavior b5 = new GetCenter(pilot);
 	      Behavior [] bArray = {b1, b2, b4, b3};
 	      Arbitrator arby = new Arbitrator(bArray);
 	      arby.go();

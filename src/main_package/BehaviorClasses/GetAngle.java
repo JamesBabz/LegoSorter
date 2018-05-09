@@ -16,6 +16,8 @@ public class GetAngle implements Behavior{
 	    private Port port;
 	    private MovePilot pilot;
 	    private int maxRange = 30;
+		private boolean hasExtended;
+		private int increaseAmount = 1;
 	    
 	    public GetAngle(MovePilot pilot, Port port) {
 	    	this.port = port;
@@ -27,7 +29,16 @@ public class GetAngle implements Behavior{
 
 	    @Override
 		public boolean takeControl() {
-	    	return this.adapter.getAngle() >= 360;
+//	    	if(this.adapter.getAngle() >= 270 && !hasExtended)
+//	    	{
+//	    		return true;
+//	    	}
+//
+//	    	return this.adapter.getAngle() >= 360;
+	    	
+	    	
+	    	
+	    	return this.adapter.getAngle() >= 90;
 	    }
 
 	    @Override
@@ -38,7 +49,23 @@ public class GetAngle implements Behavior{
 	    @Override
 		public void action() {
 	    	suppressed = false;
+	    	System.out.println(this.adapter.getAngle());
 	    	this.adapter.reset();
-	    	Main.turnRadius = Main.turnRadius+10;
+//	    	if(!hasExtended)
+//	    	{
+	    		
+//	    		hasExtended = true;
+	    		pilot.travel(40);
+//	    		suppress();
+//	    		return;
+//	    	}
+	    	
+	    	Main.turnRadius = Main.turnRadius+increaseAmount;
+//	    	hasExtended = false;
+//	    	System.out.println("ACTION");
+	    	
+	    	
+	    	
+
 	    }
 }
