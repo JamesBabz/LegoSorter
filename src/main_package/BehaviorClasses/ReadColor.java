@@ -27,7 +27,6 @@ public class ReadColor implements Behavior {
 		 adapter = new ColorAdapter(color);
    		 color.setCurrentMode("RGB");
    		 color.setFloodlight(Color.WHITE);
-   		 
 	}
 
 
@@ -48,13 +47,7 @@ public class ReadColor implements Behavior {
 		
 		suppressed = false;
 
-		 Motor.B.setSpeed(50);
-		 Motor.B.rotateTo(150);
-		 Motor.B.stop();
-		 pilot.travel(-30);
-		 Motor.B.setSpeed(50);
-		 Motor.B.rotateTo(0);
-		 Motor.B.stop();
+		
 		    	
 		    		while( !suppressed && pilot.isMoving()) {
 		    	        Thread.yield();
