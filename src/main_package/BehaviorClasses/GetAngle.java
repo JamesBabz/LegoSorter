@@ -9,36 +9,26 @@ import lejos.robotics.navigation.MovePilot;
 import lejos.robotics.navigation.Navigator;
 import lejos.robotics.subsumption.Behavior;
 import main_package.Main;
+import main_package.PilotService;
 
 public class GetAngle implements Behavior{
-	  	private EV3GyroSensor sensor;
 	  	private GyroscopeAdapter adapter;
 	    private boolean suppressed = false;
-	    private Port port;
 	    private MovePilot pilot;
 	    private int maxRange = 30;
 		private boolean hasExtended;
 		private int increaseAmount = 1;
+		private PilotService pilotService;
 	    
-	    public GetAngle(Navigator nav, Port port) {
-	    	this.port = port;
-	    	this.pilot = (MovePilot) nav.getMoveController();
-	    	this.sensor = new EV3GyroSensor(port);
-	    	this.adapter = new GyroscopeAdapter(sensor, 360);
+	    public GetAngle(EV3GyroSensor gyroSensor) {
+	    	this.pilotService = PilotService.getInstance();
+	    	this.pilot = pilotService.getPilot();
+	    	this.adapter = new GyroscopeAdapter(gyroSensor, 360);
 	    	
 	    }
 
 	    @Override
 		public boolean takeControl() {
-//	    	if(this.adapter.getAngle() >= 270 && !hasExtended)
-//	    	{
-//	    		return true;
-//	    	}
-//
-//	    	return this.adapter.getAngle() >= 360;
-	    	
-	    	
-	    	
 	    	return this.adapter.getAngle() >= 90;
 	    }
 
@@ -50,23 +40,8 @@ public class GetAngle implements Behavior{
 	    @Override
 		public void action() {
 	    	suppressed = false;
-	    	System.out.println(this.adapter.getAngle());
 	    	this.adapter.reset();
-//	    	if(!hasExtended)
-//	    	{
-	    		
-//	    		hasExtended = true;
-	    		pilot.travel(40);
-//	    		suppress();
-//	    		return;
-//	    	}
-	    	
-	    	Main.turnRadius = Main.turnRadius+increaseAmount;
-//	    	hasExtended = false;
-//	    	System.out.println("ACTION");
-	    	
-	    	
-	    	
-
+    		pilot.travel(40);
+    		this.pilotService.setTurnRadius(this.pilotService.getTurnRadius()+increaseAmount);
 	    }
 }
