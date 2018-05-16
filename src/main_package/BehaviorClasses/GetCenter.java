@@ -5,6 +5,7 @@ import lejos.robotics.navigation.MovePilot;
 import lejos.robotics.navigation.Pose;
 import lejos.robotics.subsumption.Behavior;
 import main_package.Main;
+import main_package.PilotService;
 
 public class GetCenter implements Behavior {
 	
@@ -12,17 +13,18 @@ public class GetCenter implements Behavior {
 	Pose position;
 	Point center;
 	private MovePilot pilot;
+	private PilotService pilotService;
 	
 	
-	public GetCenter(MovePilot pilot) {
-		center = new Point(0, Main.startRadius);
-		this.pilot = pilot;
+	public GetCenter() {
+		center = new Point(0, pilotService.getStartRadius());
+		this.pilot = pilotService.getPilot();
 	}
 
 	@Override
 	public boolean takeControl() {
 		position = new Pose();
-		return position.distanceTo(center) < Main.turnRadius - 2;
+		return position.distanceTo(center) < pilotService.getTurnRadius() - 2;
 	}
 
 	@Override

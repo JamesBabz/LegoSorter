@@ -1,40 +1,55 @@
 package main_package.BehaviorClasses;
 
+import java.util.HashMap;
+
 import lejos.hardware.motor.Motor;
 import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3ColorSensor;
+import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.robotics.Color;
 import lejos.robotics.ColorAdapter;
+import lejos.robotics.GyroscopeAdapter;
+import lejos.robotics.geometry.Point;
+import lejos.robotics.localization.PoseProvider;
 import lejos.robotics.navigation.MovePilot;
+import lejos.robotics.navigation.Navigator;
+import lejos.robotics.navigation.Pose;
+import lejos.robotics.navigation.Waypoint;
 import lejos.robotics.subsumption.Behavior;
+import main_package.PilotService;
 
 public class ReadColor implements Behavior {
 
 	
     Port port;
     int rgb;
-    EV3ColorSensor color;
-    ColorAdapter adapter;
+    ColorAdapter colorAdapter;
+  	GyroscopeAdapter gyroAdapter;
 	private MovePilot pilot;
-	 private boolean suppressed = false;
+	private Navigator navigator;
+	private boolean suppressed = false;
+	private HashMap<Integer, Waypoint> dropoffPoints = new HashMap<>();
+	private PilotService pilotService;
 	
-	public ReadColor(MovePilot pilot, Port port)
+	public ReadColor(EV3ColorSensor colorSensor, EV3GyroSensor gyroSensor)
 	{
-		this.pilot = pilot;
-		this.port = port;
+		this.pilotService = PilotService.getInstance();
+		this.dropoffPoints = pilotService.getDropoff();
+		this.navigator = pilotService.getNavigator();
+		this.pilot = pilotService.getPilot();
+    	this.gyroAdapter = new GyroscopeAdapter(gyroSensor, 360);
 		
-  		 color = new EV3ColorSensor(port);
-		 adapter = new ColorAdapter(color);
-   		 color.setCurrentMode("RGB");
-   		 color.setFloodlight(Color.WHITE);
+		 colorAdapter = new ColorAdapter(colorSensor);
+		 colorSensor.setCurrentMode("RGB");
+		 colorSensor.setFloodlight(Color.WHITE);
 	}
 
 
 	
 	@Override
 	public boolean takeControl() {
-		 rgb = adapter.getColorID();
-		return rgb == Color.GREEN;
+		rgb = colorAdapter.getColorID();
+		return rgb == Color.GREEN || rgb == Color.RED || rgb == Color.YELLOW || rgb == Color.BLUE;
 	}
 
 	@Override
@@ -44,11 +59,17 @@ public class ReadColor implements Behavior {
 
 	@Override
 	public void action() {
-		
 		suppressed = false;
-
-		
-		    	
+		float point = navigator.getPoseProvider().getPose().angleTo(new Point(0,0));
+		System.out.println("CURR ANGLE: " + gyroAdapter.getAngle());
+		System.out.println("ANGLE TO:" + point);
+		int x = 0;
+		while(gyroAdapter.getAngle() != Math.floor(point)) {
+			navigator.rotateTo(point+x);
+			System.out.println("CURR ANGLE: " + gyroAdapter.getAngle());
+			x += 20;
+		}
+				
 		    		while( !suppressed && pilot.isMoving()) {
 		    	        Thread.yield();
 		         	 }
