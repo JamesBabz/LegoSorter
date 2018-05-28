@@ -1,41 +1,53 @@
 package main_package.BehaviorClasses;
 
-import lejos.hardware.motor.Motor;
+import java.util.HashMap;
+
 import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3ColorSensor;
+import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.robotics.Color;
 import lejos.robotics.ColorAdapter;
+import lejos.robotics.GyroscopeAdapter;
 import lejos.robotics.navigation.MovePilot;
+import lejos.robotics.navigation.Navigator;
+import lejos.robotics.navigation.Waypoint;
 import lejos.robotics.subsumption.Behavior;
+import main_package.PilotService;
 
 public class ReadColor implements Behavior {
 
 	
     Port port;
     int rgb;
-    EV3ColorSensor color;
-    ColorAdapter adapter;
+    ColorAdapter colorAdapter;
+  	GyroscopeAdapter gyroAdapter;
 	private MovePilot pilot;
-	 private boolean suppressed = false;
+	private Navigator navigator;
+	private boolean suppressed = false;
+	private HashMap<Integer, Waypoint> dropoffPoints = new HashMap<>();
+	private PilotService pilotService;
+	private Waypoint currentPos;
+	private boolean goingToWP = false;
 	
-	public ReadColor(MovePilot pilot, Port port)
+	public ReadColor(EV3ColorSensor colorSensor, EV3GyroSensor gyroSensor)
 	{
-		this.pilot = pilot;
-		this.port = port;
+		this.pilotService = PilotService.getInstance();
+		this.dropoffPoints = pilotService.getDropoff();
+		this.navigator = pilotService.getNavigator();
+		this.pilot = pilotService.getPilot();
+    	this.gyroAdapter = new GyroscopeAdapter(gyroSensor, 360);
 		
-  		 color = new EV3ColorSensor(port);
-		 adapter = new ColorAdapter(color);
-   		 color.setCurrentMode("RGB");
-   		 color.setFloodlight(Color.WHITE);
-   		 
+		 colorAdapter = new ColorAdapter(colorSensor);
+		 colorSensor.setCurrentMode("RGB");
+		 colorSensor.setFloodlight(Color.WHITE);
 	}
 
 
 	
 	@Override
 	public boolean takeControl() {
-		 rgb = adapter.getColorID();
-		return rgb == Color.GREEN;
+		rgb = colorAdapter.getColorID();
+		return rgb == Color.GREEN || rgb == Color.RED || rgb == Color.YELLOW || rgb == Color.BLUE;
 	}
 
 	@Override
@@ -45,18 +57,22 @@ public class ReadColor implements Behavior {
 
 	@Override
 	public void action() {
-		
 		suppressed = false;
-
-		 Motor.B.setSpeed(50);
-		 Motor.B.rotateTo(150);
-		 Motor.B.stop();
-		 pilot.travel(-30);
-		 Motor.B.setSpeed(50);
-		 Motor.B.rotateTo(0);
-		 Motor.B.stop();
-		    	
-		    		while( !suppressed && pilot.isMoving()) {
+		if(navigator.pathCompleted()) {
+			if(goingToWP) {
+				pilot.travel(-100);
+				navigator.addWaypoint(currentPos);
+				System.out.println(currentPos.toString());
+			}else {
+				currentPos = new Waypoint(navigator.getPoseProvider().getPose());
+				navigator.addWaypoint(dropoffPoints.get(rgb));
+				
+			}
+			goingToWP = !goingToWP;
+			navigator.followPath();
+		}
+			
+		    		while( !suppressed) {
 		    	        Thread.yield();
 		         	 }
 }

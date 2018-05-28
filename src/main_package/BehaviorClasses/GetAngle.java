@@ -2,32 +2,29 @@ package main_package.BehaviorClasses;
 
 
 
-import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.robotics.GyroscopeAdapter;
 import lejos.robotics.navigation.MovePilot;
 import lejos.robotics.subsumption.Behavior;
-import main_package.Main;
+import main_package.PilotService;
 
 public class GetAngle implements Behavior{
-	  	private EV3GyroSensor sensor;
 	  	private GyroscopeAdapter adapter;
 	    private boolean suppressed = false;
-	    private Port port;
 	    private MovePilot pilot;
-	    private int maxRange = 30;
+		private int increaseAmount = 1;
+		private PilotService pilotService;
 	    
-	    public GetAngle(MovePilot pilot, Port port) {
-	    	this.port = port;
-	    	this.pilot = pilot;
-	    	this.sensor = new EV3GyroSensor(port);
-	    	this.adapter = new GyroscopeAdapter(sensor, 360);
+	    public GetAngle(EV3GyroSensor gyroSensor) {
+	    	this.pilotService = PilotService.getInstance();
+	    	this.pilot = pilotService.getPilot();
+	    	this.adapter = new GyroscopeAdapter(gyroSensor, 360);
 	    	
 	    }
 
 	    @Override
 		public boolean takeControl() {
-	    	return this.adapter.getAngle() >= 360;
+	    	return this.adapter.getAngle() >= 90;
 	    }
 
 	    @Override
@@ -39,6 +36,7 @@ public class GetAngle implements Behavior{
 		public void action() {
 	    	suppressed = false;
 	    	this.adapter.reset();
-	    	Main.turnRadius = Main.turnRadius+10;
+    		pilot.travel(40);
+    		this.pilotService.setTurnRadius(this.pilotService.getTurnRadius()+increaseAmount);
 	    }
 }
