@@ -15,8 +15,6 @@ public class GetAngle implements Behavior{
 	  	private GyroscopeAdapter adapter;
 	    private boolean suppressed = false;
 	    private MovePilot pilot;
-	    private int maxRange = 30;
-		private boolean hasExtended;
 		private int increaseAmount = 1;
 		private PilotService pilotService;
 	    
