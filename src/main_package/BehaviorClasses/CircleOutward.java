@@ -1,10 +1,7 @@
 package main_package.BehaviorClasses;
 
-import lejos.robotics.RegulatedMotor;
 import lejos.robotics.navigation.MovePilot;
-import lejos.robotics.navigation.Navigator;
 import lejos.robotics.subsumption.Behavior;
-import main_package.Main;
 import main_package.PilotService;
 
 public class CircleOutward implements Behavior {

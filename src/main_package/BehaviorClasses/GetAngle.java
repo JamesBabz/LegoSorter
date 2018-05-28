@@ -2,13 +2,10 @@ package main_package.BehaviorClasses;
 
 
 
-import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.robotics.GyroscopeAdapter;
 import lejos.robotics.navigation.MovePilot;
-import lejos.robotics.navigation.Navigator;
 import lejos.robotics.subsumption.Behavior;
-import main_package.Main;
 import main_package.PilotService;
 
 public class GetAngle implements Behavior{

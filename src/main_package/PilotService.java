@@ -22,7 +22,6 @@ public class PilotService {
 	private final float DISTANCE_FROM_CENTER_TO_WHEEL_MM = DISTANCE_BETWEEN_WHEEL_CENTER_MM/2;
 	private final RegulatedMotor LEFT_WHEEL_MOTOR = Motor.A;
 	private final RegulatedMotor RIGHT_WHEEL_MOTOR = Motor.D;
-//	private final MovePilot PILOT = new MovePilot(WHEEL_DIAMETER_MM, DISTANCE_BETWEEN_WHEEL_CENTER_MM, LEFT_WHEEL_MOTOR, RIGHT_WHEEL_MOTOR);
 	private final Wheel LEFT_WHEEL = WheeledChassis.modelWheel(LEFT_WHEEL_MOTOR, WHEEL_DIAMETER_MM).offset(DISTANCE_FROM_CENTER_TO_WHEEL_MM);
 	private final Wheel RIGHT_WHEEL = WheeledChassis.modelWheel(RIGHT_WHEEL_MOTOR, WHEEL_DIAMETER_MM).offset(-DISTANCE_FROM_CENTER_TO_WHEEL_MM);
 	private final Chassis CHASSIS = new WheeledChassis(new Wheel[] { LEFT_WHEEL, RIGHT_WHEEL }, WheeledChassis.TYPE_DIFFERENTIAL);

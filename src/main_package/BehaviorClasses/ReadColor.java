@@ -2,18 +2,14 @@ package main_package.BehaviorClasses;
 
 import java.util.HashMap;
 
-import lejos.hardware.motor.Motor;
 import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.robotics.Color;
 import lejos.robotics.ColorAdapter;
 import lejos.robotics.GyroscopeAdapter;
-import lejos.robotics.geometry.Point;
-import lejos.robotics.localization.PoseProvider;
 import lejos.robotics.navigation.MovePilot;
 import lejos.robotics.navigation.Navigator;
-import lejos.robotics.navigation.Pose;
 import lejos.robotics.navigation.Waypoint;
 import lejos.robotics.subsumption.Behavior;
 import main_package.PilotService;
