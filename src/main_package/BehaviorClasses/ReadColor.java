@@ -30,6 +30,8 @@ public class ReadColor implements Behavior {
 	private boolean suppressed = false;
 	private HashMap<Integer, Waypoint> dropoffPoints = new HashMap<>();
 	private PilotService pilotService;
+	private Waypoint currentPos;
+	private boolean goingToWP = false;
 	
 	public ReadColor(EV3ColorSensor colorSensor, EV3GyroSensor gyroSensor)
 	{
@@ -60,17 +62,21 @@ public class ReadColor implements Behavior {
 	@Override
 	public void action() {
 		suppressed = false;
-		float point = navigator.getPoseProvider().getPose().angleTo(new Point(0,0));
-		System.out.println("CURR ANGLE: " + gyroAdapter.getAngle());
-		System.out.println("ANGLE TO:" + point);
-		int x = 0;
-		while(gyroAdapter.getAngle() != Math.floor(point)) {
-			navigator.rotateTo(point+x);
-			System.out.println("CURR ANGLE: " + gyroAdapter.getAngle());
-			x += 20;
-		}
+		if(navigator.pathCompleted()) {
+			if(goingToWP) {
+				pilot.travel(-100);
+				navigator.addWaypoint(currentPos);
+				System.out.println(currentPos.toString());
+			}else {
+				currentPos = new Waypoint(navigator.getPoseProvider().getPose());
+				navigator.addWaypoint(dropoffPoints.get(rgb));
 				
-		    		while( !suppressed && pilot.isMoving()) {
+			}
+			goingToWP = !goingToWP;
+			navigator.followPath();
+		}
+			
+		    		while( !suppressed) {
 		    	        Thread.yield();
 		         	 }
 }

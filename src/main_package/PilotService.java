@@ -18,13 +18,13 @@ public class PilotService {
 	
 	
 	private final float WHEEL_DIAMETER_MM = 56f;
-	private final float DISTANCE_BETWEEN_WHEEL_CENTER_CM = 11.9f;
-	private final float DISTANCE_FROM_CENTER_TO_WHEEL_CM = DISTANCE_BETWEEN_WHEEL_CENTER_CM/2;
+	private final float DISTANCE_BETWEEN_WHEEL_CENTER_MM = 119f;
+	private final float DISTANCE_FROM_CENTER_TO_WHEEL_MM = DISTANCE_BETWEEN_WHEEL_CENTER_MM/2;
 	private final RegulatedMotor LEFT_WHEEL_MOTOR = Motor.A;
 	private final RegulatedMotor RIGHT_WHEEL_MOTOR = Motor.D;
 //	private final MovePilot PILOT = new MovePilot(WHEEL_DIAMETER_MM, DISTANCE_BETWEEN_WHEEL_CENTER_MM, LEFT_WHEEL_MOTOR, RIGHT_WHEEL_MOTOR);
-	private final Wheel LEFT_WHEEL = WheeledChassis.modelWheel(LEFT_WHEEL_MOTOR, WHEEL_DIAMETER_MM).offset(-DISTANCE_FROM_CENTER_TO_WHEEL_CM);
-	private final Wheel RIGHT_WHEEL = WheeledChassis.modelWheel(RIGHT_WHEEL_MOTOR, WHEEL_DIAMETER_MM).offset(DISTANCE_FROM_CENTER_TO_WHEEL_CM);
+	private final Wheel LEFT_WHEEL = WheeledChassis.modelWheel(LEFT_WHEEL_MOTOR, WHEEL_DIAMETER_MM).offset(DISTANCE_FROM_CENTER_TO_WHEEL_MM);
+	private final Wheel RIGHT_WHEEL = WheeledChassis.modelWheel(RIGHT_WHEEL_MOTOR, WHEEL_DIAMETER_MM).offset(-DISTANCE_FROM_CENTER_TO_WHEEL_MM);
 	private final Chassis CHASSIS = new WheeledChassis(new Wheel[] { LEFT_WHEEL, RIGHT_WHEEL }, WheeledChassis.TYPE_DIFFERENTIAL);
 	private final MovePilot PILOT = new MovePilot(CHASSIS);
 	private final Navigator NAVIGATOR = new Navigator(PILOT);
@@ -34,15 +34,16 @@ public class PilotService {
 	private final Waypoint BLUE_WP = new Waypoint(1000, 1000);
 	private final Waypoint YELLOW_WP = new Waypoint(0, 0);
 	
-	private int startRadius = 50;
-	private int turnRadius = 50;
+	private int startRadius = 500;
+	private int turnRadius = 500;
 	
 	
 	
 	private PilotService() {
-		   this.PILOT.setLinearSpeed(100);
-		   this.PILOT.setAngularSpeed(150);
-		   }
+			startRadius = turnRadius;
+			this.PILOT.setLinearSpeed(100);
+			this.PILOT.setAngularSpeed(150);
+	}
 	
 	public static PilotService getInstance() {
 		if(INSTANCE == null) {
